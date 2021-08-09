@@ -1,17 +1,19 @@
 # pretty
+
 Prettify JSON on the command line via STDIN.
 
-##Usage
-
-### Prettify local JSON files
-
-Prettify a local `json` file:
+## Usage
 
 ```
+$ echo "{\"hello\":\"world\"}" > file.json
+$ cat file.json 
+{"hello":"world"}
+
 $ cat file.json | pretty
 {
   "hello" : "world"
 }
+
 ```
 
 ### Network JSON
@@ -19,27 +21,69 @@ $ cat file.json | pretty
 Prettified output with `curl`:
 
 ```
-$ curl -s http://earthquake-report.com/feeds/recent-eq?json | pretty
-[
-  {
-    "location" : " Gardena, CA",
-    "magnitude" : "3",
-    "depth" : "11.28",
-    "longitude" : "-118.307",
-    "title" : "Minor earthquake -  Gardena, Ca on September 20, 2016",
-    "latitude" : "33.9165",
-    "link" : "http:\/\/earthquake-report.com\/2016\/09\/20\/minor-earthquake-gardena-ca-on-september-20-2016-2\/",
-    "date_time" : "2016-09-20T16:31:18+00:00"
+$ curl -s "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson" | pretty
+{
+  "metadata" : {
+    "status" : 200,
+    "api" : "1.10.3",
+    "title" : "USGS Magnitude 4.5+ Earthquakes, Past Day",
+    "count" : 9,
+    "url" : "https:\/\/earthquake.usgs.gov\/earthquakes\/feed\/v1.0\/summary\/4.5_day.geojson",
+    "generated" : 1628481602000
   },
-  ...
-]
-```
-
-Without `pretty`:
-
-```
-$ curl -s http://earthquake-report.com/feeds/recent-eq?json
-[{"title":"Minor earthquake -  Gardena, Ca on September 20, 2016","magnitude":"3","location":" Gardena, CA","depth":"11.28","latitude":"33.9165","longitude":"-118.307","date_time":"2016-09-20T16:31:18+00:00","link":"http:\/\/earthquake-report.com\/2016\/09\/20\/minor-earthquake-gardena-ca-on-september-20-2016-2\/"},...]
+  "features" : [
+    {
+      "properties" : {
+        "place" : "southern Mid-Atlantic Ridge",
+        "tz" : null,
+        "time" : 1628474042182,
+        "status" : "reviewed",
+        "url" : "https:\/\/earthquake.usgs.gov\/earthquakes\/eventpage\/us6000f3hg",
+        "alert" : null,
+        "tsunami" : 0,
+        "sig" : 385,
+        "code" : "6000f3hg",
+        "ids" : ",us6000f3hg,",
+        "dmin" : 15.169,
+        "gap" : 91,
+        "magType" : "mb",
+        "title" : "M 5.0 - southern Mid-Atlantic Ridge",
+        "nst" : null,
+        "updated" : 1628477656040,
+        "mag" : 5,
+        "types" : ",origin,phase-data,",
+        "type" : "earthquake",
+        "cdi" : null,
+        "net" : "us",
+        "sources" : ",us,",
+        "felt" : null,
+        "detail" : "https:\/\/earthquake.usgs.gov\/earthquakes\/feed\/v1.0\/detail\/us6000f3hg.geojson",
+        "mmi" : null,
+        "rms" : 0.68999999999999995
+      },
+      "id" : "us6000f3hg",
+      "type" : "Feature",
+      "geometry" : {
+        "type" : "Point",
+        "coordinates" : [
+          -6.1341000000000001,
+          -56.627299999999998,
+          10
+        ]
+      }
+    },
+    ...
+  ],
+  "type" : "FeatureCollection",
+  "bbox" : [
+    -76.182900000000004,
+    -59.8399,
+    10,
+    175.78389999999999,
+    51.628500000000003,
+    254.34
+  ]
+}
 ```
 
 ### Save output to file:
@@ -49,6 +93,7 @@ $ cat file.json | pretty > prettified.json
 ```
 
 ### Prettifying JSON from the clipboard
+
 1. Select and copy the minified JSON
 2. On the terminal, type `pretty`
 3. Paste the minified JSON
@@ -63,14 +108,19 @@ $ pretty
 $
 ```
 
-##Installation
+## Installation
 
-### Manual Installation
-1. Clone: `$ git clone https://github.com/eneko/pretty.git && cd pretty`
-2. Build: `$ swift build -c release`
-3. Symlink: `$ ln -s "$PWD/.build/release/pretty" /usr/local/bin/pretty`
+### From Source
+
+```
+$ git clone https://github.com/eneko/pretty.git && cd pretty
+$ swift build -c release --disable-sandbox
+$ install .build/release/pretty /usr/local/bin/
+```
 
 ### Uninstall
-1. Remove symlink: `$ rm /usr/local/bin/pretty`
-2. Remove pretty: `$ rm -rf /path/to/pretty`
+
+```
+$ rm /usr/local/bin/pretty
+```
 
